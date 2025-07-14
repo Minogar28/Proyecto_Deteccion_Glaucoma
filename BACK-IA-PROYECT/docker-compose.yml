@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+      - ./models:/app/models 
+    environment:
+      FLASK_ENV: development
+      MYSQL_DATABASE_HOST: db
+      MYSQL_DATABASE_PORT: 3306
+      MYSQL_DATABASE_USER: root
+      MYSQL_DATABASE_PASSWORD: admin
+      MYSQL_DATABASE_DB: ia_project
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.2
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: ia_project
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:

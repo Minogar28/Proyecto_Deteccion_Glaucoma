@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  # Esto debe estar antes de leer variables
+load_dotenv()
 
 
 class Config:

@@ -1,4 +1,4 @@
-# raiz/init-.py
+# app//init-.py
 
 from flask import Flask
 from flask_cors import CORS
