@@ -1,14 +1,18 @@
 import type { TabsProps } from "@mui/material";
+import type { ComponentType, JSX, ReactNode } from "react";
 
 export interface TabItem {
   label: string;
-  content: React.ReactNode;
+  component: React.ReactNode;
   disabled?: boolean;
+  onNext?: () => void;
 }
 
 export interface CustomTabsProps {
   tabs: TabItem[];
   tabsProps?: TabsProps;
+  activeTabIndex?: number;
+  setActiveTabIndex?: (index: number) => void;
 }
 
 export interface TabPanelProps {
@@ -17,3 +21,10 @@ export interface TabPanelProps {
   value: number;
   className?: string;
 }
+
+export type TabStep = {
+  label: string;
+  component: ReactNode;
+  disabled?: boolean;
+  onNext?: () => Promise<void> | void;
+};

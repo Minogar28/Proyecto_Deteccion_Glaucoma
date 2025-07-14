@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
-import { SelectorTable } from "@/components";
+import { SelectorTable, SpinnerBase } from "@/components";
 import type { GridColDef } from "@mui/x-data-grid";
 import { loadPacientes } from "@/services/pacientes/loadPacientes";
 import type { PacienteSelector } from "@/types";
+import { useLoadFetch } from "@/hooks/useLoadFetch";
+
+type propsSelectorPaciente<> = {
+  onSelect: (paciente: PacienteSelector) => void;
+};
 
 const columnasSelector: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
@@ -11,27 +16,26 @@ const columnasSelector: GridColDef[] = [
   { field: "numero_identificacion", headerName: "Identificación", width: 150 },
 ];
 
-export const SelectorPaciente = ({
-  onSelect,
-}: {
-  onSelect: (paciente: PacienteSelector) => void;
-}) => {
-  const [pacientes, setPacientes] = useState<PacienteSelector[]>([]);
-
-  useEffect(() => {
-    const fetch = async () => {
-      const data = await loadPacientes();
-      setPacientes(data);
-    };
-    fetch();
-  }, []);
+export const SelectorPaciente = ({ onSelect }: propsSelectorPaciente) => {
+  const {
+    data: pacientes,
+    loading,
+    error,
+  } = useLoadFetch<PacienteSelector>({
+    fetchFunction: loadPacientes,
+  });
 
   return (
-    <SelectorTable<PacienteSelector>
-      rows={pacientes}
-      columns={columnasSelector}
-      onSelect={onSelect}
-      checkboxSelection={false}
-    />
+    <>
+      {loading && <SpinnerBase size='lg' />}
+      {!loading && (
+        <SelectorTable<PacienteSelector>
+          rows={pacientes}
+          columns={columnasSelector}
+          onSelect={onSelect}
+          checkboxSelection={false}
+        />
+      )}
+    </>
   );
 };

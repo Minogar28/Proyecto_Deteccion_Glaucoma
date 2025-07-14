@@ -6,5 +6,8 @@ export * from "./DetectorIA";
 export * from "./Inputs";
 export * from "./Modals";
 export * from "./Tables";
+export * from "./Tabs";
 export * from "./Crud";
 export * from "./pacientes";
+export * from "./ImagenViewer";
+export * from "./Spinner";

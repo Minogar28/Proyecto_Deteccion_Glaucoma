@@ -1,3 +1,5 @@
+import { ImagenDisplay } from ".";
+
 type PropsImageViewer = {
   src: string;
   alt?: string;
@@ -6,12 +8,7 @@ type PropsImageViewer = {
 
 export default function ImageViewer({ src, alt, onRemove }: PropsImageViewer) {
   return (
-    <div className='relative max-w-md size-80 flex items-center justify-center'>
-      <img
-        src={src}
-        alt={alt ?? "Imagen"}
-        className='rounded shadow w-full h-full object-contain'
-      />
+    <ImagenDisplay src={src} alt={alt} className='relative'>
       {onRemove && (
         <button
           onClick={onRemove}
@@ -19,6 +16,6 @@ export default function ImageViewer({ src, alt, onRemove }: PropsImageViewer) {
           ✕
         </button>
       )}
-    </div>
+    </ImagenDisplay>
   );
 }

@@ -1,15 +1,4 @@
-import type { Paciente } from "@/types";
-
-export interface PacienteRaw {
-  paci_id: number;
-  paci_nombre: string;
-  paci_apellido: string;
-  paci_numero_identificacion: string;
-  paci_edad: number;
-  paci_sexo: "M" | "F";
-  paci_diabetes: 0 | 1;
-  paci_id_empresa: number;
-}
+import type { Paciente, PacienteRaw } from "@/types";
 
 export function mapPacienteFromApi(data: PacienteRaw): Paciente {
   return {
@@ -26,4 +15,34 @@ export function mapPacienteFromApi(data: PacienteRaw): Paciente {
 
 export function mapPacientesFromApi(data: PacienteRaw[]): Paciente[] {
   return data.map(mapPacienteFromApi);
+}
+
+export function mapPacienteToApi(
+  data: Omit<Paciente, "id">
+): Record<string, any> {
+  return {
+    paci_nombre: data.nombre,
+    paci_apellido: data.apellido,
+    paci_numero_identificacion: data.numero_identificacion,
+    paci_edad: data.edad ?? null,
+    paci_sexo: data.sexo ?? null,
+    paci_diabetes: data.diabetes ?? null,
+    paci_id_empresa: data.id_empresa ?? null,
+  };
+}
+
+export function getPacienteDataForFormData(
+  paciente: Paciente | null
+): Record<string, string> {
+  if (!paciente) return {};
+
+  return {
+    paci_nombre: paciente.nombre ?? "",
+    paci_apellido: paciente.apellido ?? "",
+    paci_numero_identificacion: paciente.numero_identificacion ?? "",
+    paci_edad: paciente.edad?.toString() ?? "",
+    paci_sexo: paciente.sexo ?? "",
+    paci_diabetes: paciente.diabetes?.toString() ?? "",
+    paci_id_empresa: paciente.id_empresa?.toString() ?? "1",
+  };
 }

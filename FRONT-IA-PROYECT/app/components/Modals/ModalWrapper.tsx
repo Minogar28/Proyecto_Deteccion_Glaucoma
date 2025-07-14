@@ -14,7 +14,7 @@ export default function ModalWrapper({
   onClose,
   children,
   width = "500px",
-  height = "auto",
+  height = "400px",
   zIndex = 9999,
 }: ModalWrapperProps) {
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function ModalWrapper({
       style={{ zIndex }}
       onClick={onClose}>
       <div
-        className='bg-white rounded-lg shadow-lg p-6 animate-fade-in scale-100 transition-transform relative'
+        className='bg-white rounded-lg shadow-lg p-10 animate-fade-in scale-100 transition-transform relative'
         style={{ width, height }}
         onClick={(e) => e.stopPropagation()}>
         <button

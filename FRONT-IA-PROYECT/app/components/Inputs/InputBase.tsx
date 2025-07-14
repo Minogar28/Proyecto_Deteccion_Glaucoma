@@ -9,16 +9,17 @@ export default function InputBase({
   ...rest
 }: InputBaseInterface) {
   const baseClass = `
-  ${inputBaseStyles.base}
-  ${inputBaseStyles.focus}
-  ${hasError ? inputBaseStyles.error : ""}
-  ${rest.disabled ? inputBaseStyles.disabled : ""}
-`;
+    ${inputBaseStyles.base}
+    ${inputBaseStyles.focus}
+    ${hasError ? inputBaseStyles.error : ""}
+    ${rest.disabled ? inputBaseStyles.disabled : ""}
+    ${inputBaseStyles.color} // 👈 estilo de color agregado
+  `;
 
   return (
-    <div>
+    <div className='flex flex-col gap-1'>
       {label && (
-        <label htmlFor={name} className='text-[16px]'>
+        <label htmlFor={name} className='text-[16px] font-medium text-gray-700'>
           {label}
         </label>
       )}

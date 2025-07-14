@@ -1,7 +1,6 @@
 import { apiGet } from "@/services/http";
-import type { PacienteConEmpresa } from "@/types";
+import type { PacienteConEmpresa, PacienteRaw } from "@/types";
 import { mapPacientesFromApi } from "@/services/helpers";
-import type { PacienteRaw } from "../helpers/mapPacienteFromApi";
 
 export const loadPacientes = async (): Promise<PacienteConEmpresa[]> => {
   try {
