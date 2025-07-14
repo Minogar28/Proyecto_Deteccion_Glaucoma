@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SelectorPaciente } from "./SelectorPaciente";
-import FormularioPaciente from "./FormularioPaciente";
+import FormularioPaciente from "./FormularioPaciente.alt";
 import type { Paciente } from "@/types";
 import { ModalWrapper } from "@/components";
 
@@ -15,8 +15,6 @@ export default function PacienteModal({
   onClose,
   onSelect,
 }: PacienteModalProps) {
-  const [crearOpen, setCrearOpen] = useState(false);
-
   const handleSelect = (paciente: Paciente) => {
     onSelect(paciente);
     onClose();
@@ -24,26 +22,20 @@ export default function PacienteModal({
 
   return (
     <>
-      <ModalWrapper open={open} onClose={onClose} width='600px'>
-        <div className='relative'>
-          <h2 className='text-lg font-semibold mb-4'>Seleccionar paciente</h2>
+      <ModalWrapper open={open} onClose={onClose} width='600px' height='auto'>
+        <div className='relative flex justify-center flex-col'>
+          <h2 className='text-lg font-semibold mb-4 text-black'>
+            Seleccionar paciente
+          </h2>
 
-          <button
+          {/* <button
             className='absolute top-0 right-0 border border-gray-300 rounded px-3 py-1 text-sm'
             onClick={() => setCrearOpen(true)}>
             + Crear
-          </button>
+          </button> */}
 
           <SelectorPaciente onSelect={handleSelect} />
         </div>
-      </ModalWrapper>
-
-      <ModalWrapper
-        open={crearOpen}
-        onClose={() => setCrearOpen(false)}
-        width='500px'>
-        <h2 className='text-lg font-semibold mb-4'>Nuevo paciente</h2>
-        <FormularioPaciente onSuccess={() => setCrearOpen(false)} />
       </ModalWrapper>
     </>
   );

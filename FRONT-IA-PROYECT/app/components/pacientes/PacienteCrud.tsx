@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { loadPacientes } from "@/services/pacientes/loadPacientes";
 import type { GridColDef } from "@mui/x-data-grid";
 import { CrudPanel } from "@/components";
-import FormularioPaciente from "./FormularioPaciente";
+import FormularioPaciente from "./FormularioPaciente.alt";
 import type { PacienteConEmpresa } from "@/types";
 
 const columnasPaciente: GridColDef[] = [

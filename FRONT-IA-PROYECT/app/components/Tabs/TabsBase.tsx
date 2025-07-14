@@ -1,33 +1,9 @@
-import * as React from "react";
+import { useState, type SyntheticEvent } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import type { CustomTabsProps, TabPanelProps } from "./config/TabsBase.type";
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}>
-      {value === index && (
-        <Box
-          sx={{
-            p: 3,
-            minWidth: "100%",
-            display: "flex",
-            justifyContent: "center",
-          }}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-}
+import type { CustomTabsProps } from "./config/TabsBase.type";
+import TabsPanel from "./TabsPanel";
 
 function a11yProps(index: number) {
   return {
@@ -36,28 +12,29 @@ function a11yProps(index: number) {
   };
 }
 
-export default function TabsBase({ tabs, tabsProps }: CustomTabsProps) {
-  const [value, setValue] = React.useState(0);
+export default function TabsBase({
+  tabs,
+  tabsProps,
+  activeTabIndex,
+  setActiveTabIndex,
+}: CustomTabsProps) {
+  const [value, setValue] = useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const actualIndex = activeTabIndex ?? value;
+  const handleChange = (event: SyntheticEvent, newValue: number) => {
+    setActiveTabIndex ? setActiveTabIndex(newValue) : setValue(newValue);
   };
 
   return (
     <Box
       sx={{
         display: "flex",
-        alignItems: "center",
         flexDirection: "row",
         width: "100%",
         height: "100%",
       }}>
       <Box sx={{ borderBottom: 1 }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label='dynamic tabs'
-          {...tabsProps}>
+        <Tabs value={actualIndex} onChange={handleChange} {...tabsProps}>
           {tabs.map((tab, index) => (
             <Tab
               key={index}
@@ -70,13 +47,9 @@ export default function TabsBase({ tabs, tabsProps }: CustomTabsProps) {
       </Box>
       <Box sx={{ flexGrow: 1 }}>
         {tabs.map((tab, index) => (
-          <CustomTabPanel
-            key={index}
-            value={value}
-            index={index}
-            className='flex justify-center w-full'>
-            {tab.content}
-          </CustomTabPanel>
+          <TabsPanel key={index} value={actualIndex} index={index}>
+            {tab.component}
+          </TabsPanel>
         ))}
       </Box>
     </Box>

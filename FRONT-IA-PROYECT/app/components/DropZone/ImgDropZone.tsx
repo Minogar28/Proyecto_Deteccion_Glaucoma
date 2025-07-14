@@ -23,7 +23,7 @@ export default function ImgDropZone({
       ) : (
         <Dropzone
           onDrop={handleUpload}
-          className='w-full max-w-md mb-4 text-blue-950'
+          className='size-full max-w-md mb-4 text-blue-950'
         />
       )}
     </div>

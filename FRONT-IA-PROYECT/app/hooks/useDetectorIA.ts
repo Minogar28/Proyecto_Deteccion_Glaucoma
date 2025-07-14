@@ -2,6 +2,7 @@ import { preProcesado } from "@/services/detectorIa/preProcesado";
 import { useState } from "react";
 
 export function useDetectorIA() {
+  const [rutaImage, setRutaImagen] = useState<string | null>(null);
   const [imagen, setImagen] = useState<string | null>(null);
   const [imPrePro, setImPrePro] = useState<string | null>(null);
   const [imLoc, setImLoc] = useState<string | null>(null);
@@ -30,21 +31,30 @@ export function useDetectorIA() {
     setImSeg("https://via.placeholder.com/300?text=Segmentada");
   };
 
-  const enviarArchivo = async (file: File, ojo: string, pacienteId: number) => {
+  const enviarArchivo = async (
+    file: File,
+    ojo: string,
+    pacienteId: number | null,
+    pacienteData?: Record<string, string>
+  ) => {
     try {
-      const respuesta = await preProcesado(file, ojo, pacienteId);
+      const respuesta = await preProcesado(file, ojo, pacienteId, pacienteData);
       if (respuesta?.imagen_base64) {
         setImPrePro(respuesta.imagen_base64);
         setMsg(respuesta.msg);
+        setRutaImagen(respuesta.ruta_preprocesada);
       }
     } catch (error) {
       console.error("Error enviando imagen:", error);
+      setMsg("Ocurrió un error al enviar la imagen");
     }
   };
 
   return {
     msg,
+    setMsg,
     imagen,
+    rutaImage,
     setImagen,
     imPrePro,
     setImPrePro,

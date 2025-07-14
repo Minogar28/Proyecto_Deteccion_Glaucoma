@@ -1,12 +1,24 @@
-export interface BaseFormProps {
-  fields: FieldConfig[];
-  onSubmit: (data: Record<string, any>) => Promise<void>; // o tipo más específico
+export type BaseFormProps<T extends Record<string, any>> = {
+  fields: FieldConfig<Extract<keyof T, string>>[];
+  initialValues: T;
+  onSubmit: (values: T) => Promise<void> | void;
+  validate?: (values: T) => Partial<Record<keyof T, string>>;
   buttonLabel?: string;
-}
+};
 
-export interface FieldConfig {
-  name: string;
+export type BaseFieldType = "text" | "email" | "password" | "radio" | "select";
+
+export type FieldOption = {
   label: string;
-  type: "text" | "number" | "date" | "email";
+  value: string;
+};
+
+export type FieldConfig<K extends string = string> = {
+  name: K;
+  label: string;
+  type?: BaseFieldType;
+  component?: "input" | "radio" | "select";
+  options?: string[] | FieldOption[];
   required?: boolean;
-}
+  disabled?: boolean;
+};

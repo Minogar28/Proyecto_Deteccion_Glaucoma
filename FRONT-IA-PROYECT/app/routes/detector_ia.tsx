@@ -10,7 +10,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function detector_ia() {
   return (
-    <div className='flex w-full min-h-[400px] h-[400px] '>
+    <div className='flex w-full justify-center min-h-[500px] h-[650px] '>
       <DetectarIAForm />
     </div>
   );

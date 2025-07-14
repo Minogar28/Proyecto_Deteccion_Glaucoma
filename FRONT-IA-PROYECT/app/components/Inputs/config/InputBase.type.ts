@@ -7,4 +7,5 @@ export interface InputBaseInterface
   type: string;
   required?: boolean;
   hasError?: boolean;
+  value: string;
 }
