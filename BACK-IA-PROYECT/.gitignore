@@ -7,3 +7,6 @@ dist/
 build/
 .env/
 .venv/
+.localizadas/
+.procesadas/
+.uploads/

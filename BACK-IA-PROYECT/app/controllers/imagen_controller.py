@@ -1,7 +1,8 @@
 from app.ml import preprocesamiento
+from app.ml.localizacion import localizar_imagen
 from app.utils.file_handler import guardar_imagen_original
+from app.utils.base64_encode import codificar_imagen_base64
 from datetime import datetime
-import base64
 
 
 def procesar_imagen(file_storage, ojo, paciente_id):
@@ -11,16 +12,33 @@ def procesar_imagen(file_storage, ojo, paciente_id):
 
         ruta_pre = preprocesamiento.preprocesar_imagen(ruta_original)
 
-        with open(ruta_pre, "rb") as f:
-            imagen_base64 = base64.b64encode(f.read()).decode("utf-8")
+        encode = codificar_imagen_base64(ruta_pre)
 
         return {
             "msg": "Imagen preprocesada correctamente",
-            "preprocesada": ruta_pre,
+            "ruta_preprocesada": ruta_pre,
             "ruta_original": ruta_original,
-            "imagen_base64": f"data:image/jpeg;base64,{imagen_base64}",
+            "imagen_base64": f"{encode}",
             "ojo": ojo,
             "paciente": paciente_id,
+            "fecha": datetime.now().strftime("%Y-%m-%d"),
+        }, 200
+
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+
+def localizar_imagen_ruta(ruta):
+    try:
+
+        ruta_salida = localizar_imagen(ruta)
+
+        encode = codificar_imagen_base64(ruta_salida)
+
+        return {
+            "msg": "Imagen localizada correctamente",
+            "ruta_localizada": ruta_salida,
+            "imagen_base64": f"{encode}",
             "fecha": datetime.now().strftime("%Y-%m-%d"),
         }, 200
 

@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.controllers import imagen_controller
-from app.ml.localizacion import localizar_imagen
+from app.controllers import paciente_controller
 
 
 imagen_bp = Blueprint("imagen", __name__, url_prefix="/api/imagen")
@@ -10,12 +10,21 @@ imagen_bp = Blueprint("imagen", __name__, url_prefix="/api/imagen")
 def procesar_imagen():
     if "imagen" not in request.files:
         return jsonify({"error": "No se recibió la imagen"}), 400
-    if "ojo" not in request.form or "id_paciente" not in request.form:
-        return jsonify({"error": "Faltan datos requeridos"}), 400
 
     file = request.files["imagen"]
-    tipo_ojo = request.form["ojo"]  # 'OD' o 'OS'
-    id_paciente = int(request.form["id_paciente"])
+    tipo_ojo = request.form.get("ojo")
+
+    if not tipo_ojo:
+        return jsonify({"error": "Falta el tipo de ojo"}), 400
+
+    id_paciente = request.form.get("id_paciente")
+    datos_paciente = None
+
+    if not id_paciente and request.form.get("paci_numero_identificacion"):
+        data = request.form.to_dict()
+        response, status = paciente_controller.crear_paciente(data)
+        if status == 201:
+            datos_paciente = response.get("paciente")
 
     response, status = imagen_controller.procesar_imagen(file, tipo_ojo, id_paciente)
     return jsonify(response), status
@@ -26,7 +35,6 @@ def api_localizar():
     data = request.get_json()
     ruta = data.get("ruta_imagen")
     try:
-        salida = localizar_imagen(ruta)
-        return {"status": "ok", "ruta_localizada": salida}
+        return imagen_controller.localizar_imagen_ruta(ruta)
     except Exception as e:
         return {"status": "error", "msg": str(e)}, 500
