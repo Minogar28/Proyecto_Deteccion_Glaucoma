@@ -38,7 +38,7 @@ export function LinksTo({ urls }: { urls: Url[] }) {
 
 export default function Sidebar() {
   return (
-    <aside className='flex flex-col w-[250px] bg-zinc-800 h-screen p-2 justify-between'>
+    <aside className='flex flex-col w-[250px] bg-zinc-800 min-h-full p-2 justify-between'>
       <div className='w-full p-2.5'>
         <h2 className='text-3xl font-semibold mb-4'>Menú</h2>
         <nav>

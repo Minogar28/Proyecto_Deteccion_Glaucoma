@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { loadPacientes } from "@/services/pacientes/loadPacientes";
+import { CrudPanel, FormularioPaciente } from "@/components";
 import type { GridColDef } from "@mui/x-data-grid";
-import { CrudPanel } from "@/components";
-import FormularioPaciente from "./FormularioPaciente.alt";
-import type { PacienteConEmpresa } from "@/types";
+import type { Paciente, PacienteFormValues } from "@/types";
 
 const columnasPaciente: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
@@ -11,22 +9,34 @@ const columnasPaciente: GridColDef[] = [
   { field: "apellido", headerName: "Apellido", width: 130 },
   { field: "numero_identificacion", headerName: "Identificación", width: 150 },
   { field: "edad", headerName: "Edad", width: 90 },
-  { field: "sexo", headerName: "Sexo", width: 90 },
-  {
-    field: "diabetes",
-    headerName: "Diabetes",
-    width: 100,
-    renderCell: (params) => (params.value ? "Sí" : "No"),
-  },
+  { field: "sexo", headerName: "Sexo", width: 100 },
 ];
 
-export const PacienteCrud = () => {
-  const [pacientes, setPacientes] = useState<PacienteConEmpresa[]>([]);
+export default function PacienteCrud() {
+  const [pacientes, setPacientes] = useState<PacienteFormValues[]>([]);
 
   useEffect(() => {
     const fetchPacientes = async () => {
       try {
-        const data = await loadPacientes();
+        const data: Paciente[] = [
+          {
+            id: 1,
+            nombre: "Daniel",
+            apellido: "Gómez",
+            numero_identificacion: "123456789",
+            edad: 34,
+            sexo: "M",
+          },
+          {
+            id: 2,
+            nombre: "Laura",
+            apellido: "Cruz",
+            numero_identificacion: "987654321",
+            edad: 29,
+            sexo: "F",
+          },
+        ];
+
         setPacientes(data);
       } catch (error) {
         console.error("Error cargando pacientes:", error);
@@ -36,23 +46,28 @@ export const PacienteCrud = () => {
     fetchPacientes();
   }, []);
 
-  const handleEdit = (paciente: PacienteConEmpresa) => {
+  const handleEdit = (paciente: Paciente) => {
     console.log("Editar paciente", paciente);
   };
 
-  const handleDelete = (paciente: PacienteConEmpresa) => {
+  const handleDelete = (paciente: Paciente) => {
     console.log("Eliminar paciente", paciente);
   };
 
+  const handleView = (paciente: Paciente) => {
+    console.log("Ver paciente", paciente);
+  };
+
   return (
-    <CrudPanel<PacienteConEmpresa>
-      title='Pacientes'
+    <CrudPanel<Paciente>
+      title='pacientes'
       rows={pacientes}
       columns={columnasPaciente}
-      actions={["editar", "eliminar"]}
+      actions={["editar", "eliminar", "ver"]}
       onEdit={handleEdit}
       onDelete={handleDelete}
-      renderCreateForm={(close) => <FormularioPaciente onSuccess={close} />}
+      onView={handleView}
+      renderCreateForm={() => <FormularioPaciente />}
     />
   );
-};
+}

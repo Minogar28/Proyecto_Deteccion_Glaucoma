@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import type { DataTableBaseProps } from "./config/TableBase.type";
 
@@ -11,7 +11,7 @@ export default function DataTableBase({
   sx = {},
 }: DataTableBaseProps) {
   return (
-    <Paper sx={{ height: 400, width: "100%", ...sx }}>
+    <Box sx={{ height: 400, width: "100%", padding: "10px" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -19,8 +19,8 @@ export default function DataTableBase({
         pageSizeOptions={[5, 10]}
         checkboxSelection={checkboxSelection}
         onRowClick={onRowClick}
-        sx={{ border: 0 }}
+        sx={{ border: 0, width: "auto" }}
       />
-    </Paper>
+    </Box>
   );
 }

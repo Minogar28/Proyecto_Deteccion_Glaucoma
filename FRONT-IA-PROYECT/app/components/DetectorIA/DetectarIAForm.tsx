@@ -151,7 +151,7 @@ export default function DetectarIAForm() {
   ];
 
   return (
-    <div className='flex flex-row w-full h-full bg-blue-50 rounded-2xl p-4'>
+    <>
       {msg && (
         <ModalWrapper open={true} onClose={() => setMsg(null)}>
           <h3 className='text-2xl text-black'>Resultado IA</h3>
@@ -173,6 +173,6 @@ export default function DetectarIAForm() {
           },
         }}
       />
-    </div>
+    </>
   );
 }

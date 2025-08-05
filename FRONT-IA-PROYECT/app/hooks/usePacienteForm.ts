@@ -1,11 +1,5 @@
+import type { PacienteFormValues } from "@/types";
 import { useState } from "react";
-
-export type PacienteFormValues = {
-  nombre: string;
-  apellido: string;
-  numero_identificacion: string;
-  sexo: "" | "M" | "F";
-};
 
 export function usePacienteForm(initialValues?: Partial<PacienteFormValues>) {
   const [values, setValues] = useState<PacienteFormValues>({

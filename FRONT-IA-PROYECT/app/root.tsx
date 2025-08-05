@@ -47,14 +47,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <div className='flex min-h-screen'>
+    <div className='flex h-screen'>
       <Sidebar />
-      <main className='bg-gray-600 flex-auto flex flex-col min-h-screen box-border'>
+      <main className='bg-gray-600 flex-auto flex flex-col  box-border'>
         <header className='flex w-full justify-end border-b border-gray-200'>
           <Avatar className='m-1'>U</Avatar>
         </header>
-        <div className='p-2 w-full flex flex-grow justify-center align-middle items-center overflow-auto'>
-          <Outlet />
+        <div className='p-2 w-full flex flex-grow justify-center align-middle items-center overflow-hidden '>
+          <div className='flex w-full justify-center sm:h-[450px] '>
+            <div className='flex flex-row w-full h-full bg-blue-50 rounded-2xl p-4'>
+              <Outlet />
+            </div>
+          </div>
         </div>
       </main>
     </div>

@@ -1,10 +1,11 @@
-import { IconButton } from "@mui/material";
+import { useState } from "react";
+import { Box, IconButton, Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import type { GridColDef } from "@mui/x-data-grid";
 import type { CrudTableProps } from "./config/CrudTable.type";
-import { DataTableBase } from "@/components";
+import { DataTableBase, ModalLoadWrapper } from "@/components";
 
 export default function CrudTable<T>({
   rows,
@@ -13,12 +14,24 @@ export default function CrudTable<T>({
   onDelete,
   onView,
   actions = ["editar", "eliminar"],
+  formComponent,
+  loadingCreate = false,
+  errorCreate,
   ...baseProps
-}: CrudTableProps<T>) {
+}: CrudTableProps<T> & {
+  formComponent?: React.ReactNode;
+  loadingCreate?: boolean;
+  errorCreate?: string;
+}) {
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+
+  const handleOpenModal = () => setOpenCreateModal(true);
+  const handleCloseModal = () => setOpenCreateModal(false);
+
   const actionColumn: GridColDef = {
     field: "actions",
     headerName: "Acciones",
-    width: 120,
+    width: 150,
     sortable: false,
     renderCell: (params) => (
       <>
@@ -43,5 +56,33 @@ export default function CrudTable<T>({
 
   const finalColumns = [...columns, actionColumn];
 
-  return <DataTableBase rows={rows} columns={finalColumns} {...baseProps} />;
+  return (
+    <Box
+      padding='6px'
+      display='flex'
+      position='relative'
+      justifyContent='center'
+      alignContent='center'
+      width='100%'>
+      {formComponent && (
+        <Box mb={2} display='flex' justifyContent='flex-end'>
+          <Button variant='contained' color='primary' onClick={handleOpenModal}>
+            Crear +
+          </Button>
+        </Box>
+      )}
+
+      {/* Tabla */}
+      <DataTableBase rows={rows} columns={finalColumns} {...baseProps} />
+
+      {/* Modal de creación */}
+      <ModalLoadWrapper
+        open={openCreateModal}
+        onClose={handleCloseModal}
+        loading={loadingCreate}
+        error={errorCreate}>
+        {formComponent}
+      </ModalLoadWrapper>
+    </Box>
+  );
 }

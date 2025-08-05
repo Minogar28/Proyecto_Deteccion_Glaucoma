@@ -1,11 +1,14 @@
+import { usePacienteForm } from "@/hooks/usePacienteForm";
+import type { PacienteFormValues } from "@/types";
 import { InputBase, InputRadioGroup } from "@/components";
-import type { PacienteFormValues } from "@/hooks/usePacienteForm";
 
 type Props = {
-  values: PacienteFormValues;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  values?: PacienteFormValues; // solo si `managedExternally`
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   errors?: Partial<Record<keyof PacienteFormValues, string>>;
   disabled?: boolean;
+  onSuccess?: () => void;
+  managedExternally?: boolean;
 };
 
 export default function FormularioPaciente({
@@ -13,47 +16,71 @@ export default function FormularioPaciente({
   onChange,
   errors = {},
   disabled = false,
+  onSuccess,
+  managedExternally = false,
 }: Props) {
+  const {
+    values: internalValues,
+    handleChange: internalChange,
+    errors: internalErrors,
+    validate,
+    reset,
+  } = usePacienteForm();
+
+  const campos = managedExternally ? values! : internalValues;
+  const cambios = managedExternally ? onChange! : internalChange;
+  const errores = managedExternally ? errors : internalErrors;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const isValid = managedExternally ? true : validate();
+    if (!isValid) return;
+
+    console.log("Paciente creado:", campos);
+    if (onSuccess) onSuccess();
+    if (!managedExternally) reset();
+  };
+
   return (
-    <form className='space-y-5 max-w-md bg-white p-6 rounded shadow'>
+    <form
+      className='space-y-5 max-w-md bg-white p-6 rounded shadow'
+      onSubmit={handleSubmit}>
       <InputBase
         name='nombre'
         label='Nombre'
         type='text'
-        value={values.nombre}
-        onChange={onChange}
-        hasError={!!errors.nombre}
+        value={campos.nombre}
+        onChange={cambios}
+        hasError={!!errores.nombre}
         required
         disabled={disabled}
       />
-
       <InputBase
         name='apellido'
         label='Apellido'
         type='text'
-        value={values.apellido}
-        onChange={onChange}
-        hasError={!!errors.apellido}
+        value={campos.apellido}
+        onChange={cambios}
+        hasError={!!errores.apellido}
         required
         disabled={disabled}
       />
-
       <InputBase
         name='numero_identificacion'
         label='Identificación'
         type='text'
-        value={values.numero_identificacion}
-        onChange={onChange}
-        hasError={!!errors.numero_identificacion}
+        value={campos.numero_identificacion}
+        onChange={cambios}
+        hasError={!!errores.numero_identificacion}
         required
         disabled={disabled}
       />
-
       <InputRadioGroup
         name='sexo'
         label='Sexo'
-        value={values.sexo}
-        onChange={onChange}
+        value={campos.sexo}
+        onChange={cambios}
         options={[
           { label: "Masculino", value: "M" },
           { label: "Femenino", value: "F" },
@@ -61,9 +88,13 @@ export default function FormularioPaciente({
         required
         direction='horizontal'
       />
-      {errors.sexo && (
-        <p className='text-red-500 text-sm mt-1'>{errors.sexo}</p>
+      {errores.sexo && (
+        <p className='text-red-500 text-sm mt-1'>{errores.sexo}</p>
       )}
+
+      <button type='submit' className='btn btn-primary'>
+        {managedExternally ? "Guardar paciente" : "Crear paciente"}
+      </button>
     </form>
   );
 }

@@ -1,4 +1,4 @@
-export { PacienteCrud } from "./PacienteCrud";
+export { default as PacienteCrud } from "./PacienteCrud";
 export { default as PacienteModal } from "./PacienteModal";
 export { SelectorPaciente } from "./SelectorPaciente";
 export { default as FormularioPacienteAlt } from "./FormularioPaciente.alt";
